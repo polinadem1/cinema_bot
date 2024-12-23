@@ -115,7 +115,6 @@ async def handle_genre_selection(update: Update, context: ContextTypes.DEFAULT_T
     else:
         await query.message.reply_text("Жанр не найден. Попробуйте снова.")
 
-    # Возврат в главное меню
     await show_main_menu(update, context)
 
 async def handle_search(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -145,10 +144,9 @@ async def handle_search_input(update: Update, context: ContextTypes.DEFAULT_TYPE
         else:
             await update.message.reply_text("Не найдено фильмов с таким названием.")
 
-        # Возврат в главное меню
         await show_main_menu(update, context)
 
-# Новый обработчик для имени пользователя
+#обработчик для имени пользователя
 async def handle_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.user_data.get('expecting_name'):
         user_name = update.message.text
@@ -160,8 +158,6 @@ async def handle_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Приятно познакомиться, {user_name}! Нажми на кнопку с жанром, чтобы получить рекомендации:",
             reply_markup=reply_markup
         )
-
-# Добавляем условия в основную конфигурацию обработчиков
 
 app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
@@ -180,7 +176,7 @@ async def handle_test_character(update: Update, context: ContextTypes.DEFAULT_TY
     user_name = context.user_data.get('user_name', 'друг')
     await query.answer()
 
-    # Инициализация состояния теста только при первом входе
+    #тест первый вход
     if 'test_stage' not in context.user_data or context.user_data['test_stage'] == 0:
         context.user_data['test_stage'] = 0
         context.user_data['test_answers'] = []
@@ -281,8 +277,6 @@ async def handle_test_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     answer = query.data.replace("test_", "")
     context.user_data['test_answers'].append(answer)
     await handle_test_character(update, context)
-
-# Добавление обработчиков
 
 app.add_handler(CallbackQueryHandler(handle_test_character, pattern="test_character"))
 app.add_handler(CallbackQueryHandler(handle_test_answer, pattern="test_.*"))
